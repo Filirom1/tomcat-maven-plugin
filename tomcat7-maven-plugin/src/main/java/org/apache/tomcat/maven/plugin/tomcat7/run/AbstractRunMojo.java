@@ -149,6 +149,12 @@ public abstract class AbstractRunMojo
     private int port;
 
     /**
+     * The address to run the Tomcat server on.
+     */
+    @Parameter( property = "maven.tomcat.address", defaultValue = "0.0.0.0" )
+    private String address;
+
+    /**
      * The AJP port to run the Tomcat server on.
      * By default it's 0 this means won't be started.
      * The ajp connector will be started only for value > 0.
@@ -1023,6 +1029,7 @@ public abstract class AbstractRunMojo
 
                 Connector connector = new Connector( protocol );
                 connector.setPort( port );
+                connector.setProperty( "address", address );
 
                 if ( httpsPort > 0 )
                 {
@@ -1046,6 +1053,7 @@ public abstract class AbstractRunMojo
                 {
                     httpsConnector = new Connector( protocol );
                     httpsConnector.setPort( httpsPort );
+                    httpsConnector.setProperty( "address", address );
                     httpsConnector.setSecure( true );
                     httpsConnector.setProperty( "SSLEnabled", "true" );
                     // should be default but configure it anyway
@@ -1075,6 +1083,7 @@ public abstract class AbstractRunMojo
                 {
                     ajpConnector = new Connector( ajpProtocol );
                     ajpConnector.setPort( ajpPort );
+                    ajpConnector.setProperty( "address", address );
                     ajpConnector.setURIEncoding( uriEncoding );
                     embeddedTomcat.getEngine().getService().addConnector( ajpConnector );
                 }
